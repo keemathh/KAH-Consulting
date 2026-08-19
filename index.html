@@ -536,22 +536,6 @@
             text-align: center;
             font-size: 0.85rem;
         }
-
-        /* TOAST NOTIFICATION */
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--kah-navy-primary);
-            color: #FFFFFF;
-            padding: 1.2rem 1.8rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--kah-teal-accent);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            display: none;
-            z-index: 2000;
-            font-size: 0.95rem;
-        }
     </style>
 </head>
 <body>
@@ -737,35 +721,36 @@
             </div>
 
             <div class="form-card">
-                <form id="auditForm" onsubmit="handleFormSubmission(event)">
+                <!-- UPDATED FORMSPREE ENDPOINT -->
+                <form id="auditForm" action="https://formspree.io/f/xyeglekg" method="POST" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="contactName">Executive / Contact Person</label>
-                            <input type="text" id="contactName" required placeholder="e.g. Director / Facility Manager">
+                            <input type="text" id="contactName" name="Contact Name" required placeholder="e.g. Director / Facility Manager">
                         </div>
                         <div class="form-group">
                             <label for="contactEmail">Corporate Email Address</label>
-                            <input type="email" id="contactEmail" required placeholder="e.g. executive@company.co.za">
+                            <input type="email" id="contactEmail" name="Email" required placeholder="e.g. executive@company.co.za">
                         </div>
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="clientCategory">Client Category</label>
-                            <select id="clientCategory">
-                                <option value="corporate">Corporate / Industrial Heavy Off-taker</option>
-                                <option value="uip">Urban Improvement Precinct (UIP) / Residential Estate</option>
-                                <option value="commercial">Commercial Office / Retail Precinct</option>
-                                <option value="general">Systems Optimization Client</option>
+                            <select id="clientCategory" name="Client Category">
+                                <option value="Corporate / Industrial Heavy Off-taker">Corporate / Industrial Heavy Off-taker</option>
+                                <option value="Urban Improvement Precinct (UIP) / Residential Estate">Urban Improvement Precinct (UIP) / Residential Estate</option>
+                                <option value="Commercial Office / Retail Precinct">Commercial Office / Retail Precinct</option>
+                                <option value="Systems Optimization Client">Systems Optimization Client</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="monthlySpend">Approximate Monthly Electricity Spend</label>
-                            <select id="monthlySpend">
-                                <option value="100k-500k">R100,000 – R500,000 / month</option>
-                                <option value="500k-2m">R500,000 – R2,000,000 / month</option>
-                                <option value="2m+">R2,000,000+ / month</option>
-                                <option value="under100k">Under R100,000 / month</option>
+                            <select id="monthlySpend" name="Monthly Spend">
+                                <option value="R100,000 – R500,000 / month">R100,000 – R500,000 / month</option>
+                                <option value="R500,000 – R2,000,000 / month">R500,000 – R2,000,000 / month</option>
+                                <option value="R2,000,000+ / month">R2,000,000+ / month</option>
+                                <option value="Under R100,000 / month">Under R100,000 / month</option>
                             </select>
                         </div>
                     </div>
@@ -773,7 +758,7 @@
                     <div class="form-group" style="margin-bottom: 1.5rem;">
                         <label>Upload Historic Electricity Bill (For Back-Extrapolation Modeling)</label>
                         <div class="file-upload-box" onclick="document.getElementById('billFile').click()">
-                            <input type="file" id="billFile" style="display: none;" onchange="updateFileName(this)">
+                            <input type="file" id="billFile" name="Utility Bill Attachment" style="display: none;" onchange="updateFileName(this)">
                             <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📄</div>
                             <span id="fileUploadText" style="font-size: 0.9rem; color: var(--kah-text-muted);">
                                 Click or drag & drop utility bill PDF / Excel files here
@@ -783,9 +768,11 @@
 
                     <div class="form-group" style="margin-bottom: 1.5rem;">
                         <label for="overviewNotes">Facility Overview / Core Objectives</label>
-                        <textarea id="overviewNotes" rows="3" placeholder="Specify any current roof limits, peak load times, or specific facility constraints..."></textarea>
+                        <textarea id="overviewNotes" name="Facility Notes" rows="3" placeholder="Specify any current roof limits, peak load times, or specific facility constraints..."></textarea>
                     </div>
 
+                    <!-- Required Formspree Anti-Spam / Redirection Setup -->
+                    <input type="hidden" name="_subject" value="New KAH Feasibility Audit Request!">
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Bill for Confidential Feasibility Modeling →</button>
                 </form>
             </div>
@@ -819,11 +806,6 @@
             <p>© 2026 KAH Consulting. All Rights Reserved.</p>
         </div>
     </footer>
-
-    <!-- TOAST NOTIFICATION SYSTEM -->
-    <div id="toastNotification" class="toast">
-        Feasibility audit logged. Our technical team will review the submitted profile.
-    </div>
 
     <!-- CLIENT INTERACTIVE LOGIC -->
     <script>
@@ -869,21 +851,6 @@
                 textSpan.style.color = '#0EA5E9';
                 textSpan.style.fontWeight = 'bold';
             }
-        }
-
-        // Form Submit Handler
-        function handleFormSubmission(e) {
-            e.preventDefault();
-            const toast = document.getElementById('toastNotification');
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-                switchTab('home');
-                document.getElementById('auditForm').reset();
-                document.getElementById('fileUploadText').innerText = 'Click or drag & drop utility bill PDF / Excel files here';
-                document.getElementById('fileUploadText').style.color = '#64748B';
-            }, 3500);
         }
     </script>
 </body>
